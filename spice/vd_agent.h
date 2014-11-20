@@ -77,6 +77,12 @@ enum {
     VD_AGENT_FILE_XFER_DATA,
     VD_AGENT_CLIENT_DISCONNECTED,
     VD_AGENT_MAX_CLIPBOARD,
+    VD_AGENT_PORT_FORWARD_LISTEN,
+    VD_AGENT_PORT_FORWARD_CONNECT,
+    VD_AGENT_PORT_FORWARD_DATA,
+    VD_AGENT_PORT_FORWARD_ACK,
+    VD_AGENT_PORT_FORWARD_CLOSE,
+    VD_AGENT_PORT_FORWARD_SHUTDOWN,
     VD_AGENT_END_MESSAGE,
 };
 
@@ -218,6 +224,7 @@ enum {
     VD_AGENT_CAP_GUEST_LINEEND_LF,
     VD_AGENT_CAP_GUEST_LINEEND_CRLF,
     VD_AGENT_CAP_MAX_CLIPBOARD,
+    VD_AGENT_CAP_PORT_FORWARDING,
     VD_AGENT_END_CAP,
 };
 
@@ -231,6 +238,35 @@ typedef struct SPICE_ATTR_PACKED VDAgentAnnounceCapabilities {
     uint32_t  request;
     uint32_t caps[0];
 } VDAgentAnnounceCapabilities;
+
+typedef struct SPICE_ATTR_PACKED VDAgentPortForwardListenMessage {
+    uint16_t port;
+} VDAgentPortForwardListenMessage;
+
+typedef struct SPICE_ATTR_PACKED VDAgentPortForwardConnectMessage {
+    uint16_t port;
+    uint32_t id;
+    uint32_t ack_interval;
+} VDAgentPortForwardConnectMessage;
+
+typedef struct SPICE_ATTR_PACKED VDAgentPortForwardDataMessage {
+    uint32_t id;
+    uint64_t size;
+    uint8_t data[0];
+} VDAgentPortForwardDataMessage;
+
+typedef struct SPICE_ATTR_PACKED VDAgentPortForwardAckMessage {
+    uint32_t id;
+    uint64_t size;
+} VDAgentPortForwardAckMessage;
+
+typedef struct SPICE_ATTR_PACKED VDAgentPortForwardCloseMessage {
+    uint32_t id;
+} VDAgentPortForwardCloseMessage;
+
+typedef struct SPICE_ATTR_PACKED VDAgentPortForwardShutdownMessage {
+    uint16_t port;
+} VDAgentPortForwardShutdownMessage;
 
 #define VD_AGENT_CAPS_SIZE_FROM_MSG_SIZE(msg_size) \
     (((msg_size) - sizeof(VDAgentAnnounceCapabilities)) / sizeof(uint32_t))
