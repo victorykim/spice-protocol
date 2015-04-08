@@ -83,6 +83,7 @@ enum {
     VD_AGENT_PORT_FORWARD_ACK,
     VD_AGENT_PORT_FORWARD_CLOSE,
     VD_AGENT_PORT_FORWARD_SHUTDOWN,
+    VD_AGENT_PORT_FORWARD_LISTEN_BIND,
     VD_AGENT_END_MESSAGE,
 };
 
@@ -267,6 +268,11 @@ typedef struct SPICE_ATTR_PACKED VDAgentPortForwardCloseMessage {
 typedef struct SPICE_ATTR_PACKED VDAgentPortForwardShutdownMessage {
     uint16_t port;
 } VDAgentPortForwardShutdownMessage;
+
+typedef struct SPICE_ATTR_PACKED VDAgentPortForwardListenBindMessage {
+    uint16_t port;
+    char bind_address[0];
+} VDAgentPortForwardListenBindMessage;
 
 #define VD_AGENT_CAPS_SIZE_FROM_MSG_SIZE(msg_size) \
     (((msg_size) - sizeof(VDAgentAnnounceCapabilities)) / sizeof(uint32_t))
