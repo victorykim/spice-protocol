@@ -143,8 +143,14 @@
     ((long) ((uint8_t*) &((struct_type*) 0)->member))
 #endif
 
+#if    __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4)
+#define SPICE_CONTAINEROF(ptr, struct_type, member) ({ \
+    const typeof( ((struct_type *)0)->member ) *__mptr = (ptr);    \
+    ((struct_type *)(void *)((uint8_t *)(__mptr) - SPICE_OFFSETOF(struct_type, member))); })
+#else
 #define SPICE_CONTAINEROF(ptr, struct_type, member) \
     ((struct_type *)(void *)((uint8_t *)(ptr) - SPICE_OFFSETOF(struct_type, member)))
+#endif
 
 #define SPICE_MEMBER_P(struct_p, struct_offset)   \
     ((gpointer) ((guint8*) (struct_p) + (glong) (struct_offset)))
