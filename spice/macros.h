@@ -143,7 +143,12 @@
     ((long) ((uint8_t*) &((struct_type*) 0)->member))
 #endif
 
-#if    __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4)
+/* The SPICE_USE_SAFER_CONTAINEROF macro is used to avoid
+ * compilation breakage with older spice-server releases which
+ * triggered some errors without an additional patch.
+ */
+#if defined(__GNUC__) && defined(SPICE_USE_SAFER_CONTAINEROF) && \
+    (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4))
 #define SPICE_CONTAINEROF(ptr, struct_type, member) ({ \
     const typeof( ((struct_type *)0)->member ) *__mptr = (ptr);    \
     ((struct_type *)(void *)((uint8_t *)(__mptr) - SPICE_OFFSETOF(struct_type, member))); })
