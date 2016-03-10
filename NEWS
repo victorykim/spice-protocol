@@ -1,3 +1,10 @@
+Major changes in 0.12.11
+========================
+* protocol: add support for the VP8 and h264 video codecs
+* protocol: add unix GL scanout messages
+* remove code generation scripts, moved back to spice-common
+* macros improvements, more type safety
+
 Major changes in 0.12.10
 ========================
 * Add VD_AGENT_CAP_MONITORS_CONFIG_POSITION to handle multi-monitor
