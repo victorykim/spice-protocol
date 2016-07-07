@@ -1,3 +1,7 @@
+Major changes in 0.12.12
+========================
+* protocol: Add lz4 compression support to the SpiceVMC channel
+
 Major changes in 0.12.11
 ========================
 * protocol: add support for the VP8 and h264 video codecs
