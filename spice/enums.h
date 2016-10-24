@@ -106,13 +106,6 @@ typedef enum SpiceMouseMode {
     SPICE_MOUSE_MODE_MASK = 0x3
 } SpiceMouseMode;
 
-typedef enum SpiceDataCompressionType {
-    SPICE_DATA_COMPRESSION_TYPE_NONE,
-    SPICE_DATA_COMPRESSION_TYPE_LZ4,
-
-    SPICE_DATA_COMPRESSION_TYPE_ENUM_END
-} SpiceDataCompressionType;
-
 typedef enum SpicePubkeyType {
     SPICE_PUBKEY_TYPE_INVALID,
     SPICE_PUBKEY_TYPE_RSA,
@@ -127,6 +120,13 @@ typedef enum SpicePubkeyType {
 
     SPICE_PUBKEY_TYPE_ENUM_END
 } SpicePubkeyType;
+
+typedef enum SpiceDataCompressionType {
+    SPICE_DATA_COMPRESSION_TYPE_NONE,
+    SPICE_DATA_COMPRESSION_TYPE_LZ4,
+
+    SPICE_DATA_COMPRESSION_TYPE_ENUM_END
+} SpiceDataCompressionType;
 
 typedef enum SpiceClipType {
     SPICE_CLIP_TYPE_NONE,
