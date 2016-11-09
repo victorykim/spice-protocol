@@ -66,10 +66,23 @@ enum {
     VD_AGENT_MOUSE_STATE = 1,
     VD_AGENT_MONITORS_CONFIG,
     VD_AGENT_REPLY,
+    /* Set clipboard data (both directions).
+     * Message comes with type and data.
+     * See VDAgentClipboard structure.
+     */
     VD_AGENT_CLIPBOARD,
     VD_AGENT_DISPLAY_CONFIG,
     VD_AGENT_ANNOUNCE_CAPABILITIES,
+    /* Asks to listen for clipboard changes (both directions).
+     * Remote should empty clipboard and wait for one
+     * of the types passed.
+     * See VDAgentClipboardGrab structure.
+     */
     VD_AGENT_CLIPBOARD_GRAB,
+    /* Asks for clipboard data (both directions).
+     * Request comes with a specific type.
+     * See VDAgentClipboardRequest structure.
+     */
     VD_AGENT_CLIPBOARD_REQUEST,
     VD_AGENT_CLIPBOARD_RELEASE,
     VD_AGENT_FILE_XFER_START,
