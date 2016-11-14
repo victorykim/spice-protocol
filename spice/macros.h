@@ -47,7 +47,12 @@
 #define SPICE_GNUC_NULL_TERMINATED
 #endif
 
-#if     (__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
+#ifndef __has_feature
+#define __has_feature(x) 0  /* Compatibility with non-clang compilers. */
+#endif
+
+#if     (!defined(__clang__) && ((__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3))) || \
+        (defined(__clang__) && __has_feature(__alloc_size__))
 #define SPICE_GNUC_ALLOC_SIZE(x) __attribute__((__alloc_size__(x)))
 #define SPICE_GNUC_ALLOC_SIZE2(x,y) __attribute__((__alloc_size__(x,y)))
 #else
@@ -139,7 +144,7 @@
 #endif
 
 #define SPICE_CONTAINEROF(ptr, struct_type, member) \
-    ((struct_type *)((uint8_t *)(ptr) - SPICE_OFFSETOF(struct_type, member)))
+    ((struct_type *)(void *)((uint8_t *)(ptr) - SPICE_OFFSETOF(struct_type, member)))
 
 #define SPICE_MEMBER_P(struct_p, struct_offset)   \
     ((gpointer) ((guint8*) (struct_p) + (glong) (struct_offset)))
@@ -358,5 +363,69 @@
 #  define SPICE_BYTESWAP64(val) (SPICE_BYTESWAP64_CONSTANT (val))
 #endif /* generic */
 
+
+/* detect endianess */
+#undef SPICE_ENDIAN
+#define SPICE_ENDIAN_LITTLE 4321
+#define SPICE_ENDIAN_BIG    1234
+#define SPICE_ENDIAN_PDP    2143
+
+/* gcc already defined these, use them */
+#if defined(__BYTE_ORDER__) && defined(__ORDER_LITTLE_ENDIAN__) \
+    && defined(__ORDER_BIG_ENDIAN__) && defined(__ORDER_PDP_ENDIAN__)
+#  if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+#    define SPICE_ENDIAN SPICE_ENDIAN_LITTLE
+#  elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+#    define SPICE_ENDIAN SPICE_ENDIAN_BIG
+#  elif __BYTE_ORDER__ == __ORDER_PDP_ENDIAN__
+#    define SPICE_ENDIAN SPICE_ENDIAN_PDP
+#  else
+#    error __BYTE_ORDER__ not defined correctly
+#  endif
+#endif
+
+/* use suggestions at http://sourceforge.net/p/predef/wiki/Endianness/ */
+#ifndef SPICE_ENDIAN
+#  if defined(__LITTLE_ENDIAN__) || defined(__ARMEL__) \
+      || defined(__THUMBEL__) || defined(__AARCH64EL__) \
+      || defined(_MIPSEL) || defined(__MIPSEL) || defined(__MIPSEL__) \
+      || defined(__amd64__) || defined(__x86_64__) || defined(__i386__)
+#    define SPICE_ENDIAN SPICE_ENDIAN_LITTLE
+#  endif
+#  if defined(__BIG_ENDIAN__) || defined(__ARMEB__) \
+      || defined(__THUMBEB__) || defined(__AARCH64EB__) \
+      || defined(_MIPSEB) || defined(__MIPSEB) || defined(__MIPSEB__)
+#    ifdef SPICE_ENDIAN
+#      error Both little and big endian detected
+#    endif
+#    define SPICE_ENDIAN SPICE_ENDIAN_BIG
+#  endif
+#endif
+
+/* MS compiler */
+#if !defined(SPICE_ENDIAN) && defined(_MSC_VER)
+/* Windows support only little endian arm */
+#  if defined(_M_IX86) || defined(_M_AMD64) || defined(_M_X64) \
+      || defined(_M_ARM)
+#    define SPICE_ENDIAN SPICE_ENDIAN_LITTLE
+#  endif
+#endif
+
+#if !defined(SPICE_ENDIAN)
+#error Unable to detect processor endianess
+#endif
+
+#if SPICE_ENDIAN == SPICE_ENDIAN_PDP
+#error PDP endianess not supported by Spice
+#endif
+
+
+#if SPICE_ENDIAN == SPICE_ENDIAN_LITTLE
+#define SPICE_MAGIC_CONST(s) \
+    ((uint32_t)((s[0]&0xffu)|((s[1]&0xffu)<<8)|((s[2]&0xffu)<<16)|((s[3]&0xffu)<<24)))
+#else
+#define SPICE_MAGIC_CONST(s) \
+    ((uint32_t)((s[3]&0xffu)|((s[2]&0xffu)<<8)|((s[1]&0xffu)<<16)|((s[0]&0xffu)<<24)))
+#endif
 
 #endif /* _H_SPICE_MACROS */

@@ -1,5 +1,18 @@
 NULL =
-SUBDIRS = spice
+ACLOCAL_AMFLAGS = -I m4
+SUBDIRS = python_modules spice
+
+codegendir = $(libdir)/spice-protocol
+dist_codegen_DATA =			\
+	spice.proto			\
+	spice1.proto			\
+	$(NULL)
+
+dist_codegen_SCRIPTS =			\
+	spice_codegen.py		\
+	$(NULL)
+
+DISTCLEANFILES = *.pyc
 
 pkgconfigdir = $(datadir)/pkgconfig
 pkgconfig_DATA = spice-protocol.pc
