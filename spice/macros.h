@@ -78,11 +78,13 @@
 #define SPICE_GNUC_NO_INSTRUMENT
 #endif  /* !__GNUC__ */
 
-#if    __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 1)
+#ifdef G_DEPRECATED
+#define SPICE_GNUC_DEPRECATED  G_DEPRECATED
+#elif  __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 1)
 #define SPICE_GNUC_DEPRECATED  __attribute__((__deprecated__))
 #else
 #define SPICE_GNUC_DEPRECATED
-#endif /* __GNUC__ */
+#endif
 
 #if     __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 3)
 #  define SPICE_GNUC_MAY_ALIAS __attribute__((may_alias))
