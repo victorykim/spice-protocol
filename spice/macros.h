@@ -82,6 +82,8 @@
 #define SPICE_GNUC_DEPRECATED  G_DEPRECATED
 #elif  __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 1)
 #define SPICE_GNUC_DEPRECATED  __attribute__((__deprecated__))
+#elif defined(_MSC_VER) && (_MSC_VER >= 1300)
+#define SPICE_GNUC_DEPRECATED  __declspec(deprecated)
 #else
 #define SPICE_GNUC_DEPRECATED
 #endif
