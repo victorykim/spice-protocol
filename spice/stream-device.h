@@ -81,6 +81,8 @@ typedef enum StreamMsgType {
     STREAM_TYPE_FORMAT,
     /* stream data */
     STREAM_TYPE_DATA,
+    /* server ask to start a new stream */
+    STREAM_TYPE_START_STOP,
 } StreamMsgType;
 
 /* Generic extension capabilities.
@@ -124,5 +126,22 @@ typedef struct StreamMsgFormat {
 typedef struct StreamMsgData {
     uint8_t data[0];
 } StreamMsgData;
+
+/* Tell to stop current stream and possibly start a new one.
+ * This message is sent by the host to the guest.
+ * Allows to communicate the codecs supported by the clients.
+ * The agent should stop the old stream and if any codec in the
+ * list is supported start streaming (as Mjpeg is always supported
+ * agent should stop only on a real stop request).
+ *
+ * States allowed: any
+ *   state will change to Idle (no codecs) or Ready
+ */
+typedef struct StreamMsgStartStop {
+    /* supported codecs, 0 to stop streaming */
+    uint8_t num_codecs;
+    /* as defined in SpiceVideoCodecType enumeration */
+    uint8_t codecs[0];
+} StreamMsgStartStop;
 
 #endif /* SPICE_STREAM_DEVICE_H_ */
