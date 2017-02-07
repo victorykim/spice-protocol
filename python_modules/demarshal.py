@@ -86,8 +86,8 @@ def write_parser_helpers(writer):
         writer.statement("return val")
         writer.end_block()
         writer.macro("write_%sint64" % sign, "ptr, val", "\\")
-        writer.writeln("    do { *((uint32_t *)(ptr)) = *((uint32_t *)(&val)); \\")
-        writer.writeln("         *((uint32_t *)(ptr) + 1) = *((uint32_t *)(&val) + 1); } while(0)")
+        writer.writeln("    do { %s tmp = v; \\" % ctype)
+        writer.writeln("         memcpy((char *)ptr, &tmp, sizeof(%s)); } while (0)" % ctype)
     writer.writeln("#else")
     for sign in ["", "u"]:
         type = "%sint64" % sign
