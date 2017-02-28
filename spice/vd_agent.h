@@ -268,6 +268,9 @@ typedef struct SPICE_ATTR_PACKED VDAgentAnnounceCapabilities {
 #define VD_AGENT_SET_CAPABILITY(caps, index) \
     { (caps)[(index) / 32] |= (1 << ((index) % 32)); }
 
+#define VD_AGENT_CLEAR_CAPABILITY(caps, index) \
+    { (caps)[(index) / 32] &= ~(1 << ((index) % 32)); }
+
 #include <spice/end-packed.h>
 
 #endif /* _H_VD_AGENT */
