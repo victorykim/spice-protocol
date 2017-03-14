@@ -83,6 +83,8 @@ typedef enum StreamMsgType {
     STREAM_TYPE_DATA,
     /* server ask to start a new stream */
     STREAM_TYPE_START_STOP,
+    /* server notify errors to guest */
+    STREAM_TYPE_NOTIFY_ERROR,
 } StreamMsgType;
 
 /* Generic extension capabilities.
@@ -143,5 +145,23 @@ typedef struct StreamMsgStartStop {
     /* as defined in SpiceVideoCodecType enumeration */
     uint8_t codecs[0];
 } StreamMsgStartStop;
+
+/* Tell guest about invalid protocol.
+ * This message is sent by the host to the guest.
+ * The server will stop processing data from the guest.
+ *
+ * States allowed: any
+ */
+typedef struct StreamMsgNotifyError {
+    /* numeric error code.
+     * Currently not defined, set to 0.
+     */
+    uint32_t error_code;
+    /* String message, UTF-8 encoded.
+     * This field terminate with the message.
+     * Not necessary NUL-terminated.
+     */
+    uint8_t msg[0];
+} StreamMsgNotifyError;
 
 #endif /* SPICE_STREAM_DEVICE_H_ */
