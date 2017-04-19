@@ -19,6 +19,7 @@ spice_protocol_include_HEADERS =		\
 	types.h					\
 	vd_agent.h				\
 	vdi_dev.h				\
+	stream-device.h				\
 	$(NULL)
 
 -include $(top_srcdir)/git.mk
