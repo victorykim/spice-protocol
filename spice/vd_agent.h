@@ -99,11 +99,19 @@ enum {
     VD_AGENT_FILE_XFER_STATUS_CANCELLED,
     VD_AGENT_FILE_XFER_STATUS_ERROR,
     VD_AGENT_FILE_XFER_STATUS_SUCCESS,
+    VD_AGENT_FILE_XFER_STATUS_NOT_ENOUGH_SPACE,
 };
 
 typedef struct SPICE_ATTR_PACKED VDAgentFileXferStatusMessage {
    uint32_t id;
    uint32_t result;
+   /* Used to send additional data for detailed error messages
+    * to clients with VD_AGENT_CAP_FILE_XFER_DETAILED_ERRORS capability.
+    * Type of data varies with the result:
+    * result : data type
+    * VD_AGENT_FILE_XFER_STATUS_NOT_ENOUGH_SPACE : uint64_t
+    */
+   uint8_t data[0];
 } VDAgentFileXferStatusMessage;
 
 typedef struct SPICE_ATTR_PACKED VDAgentFileXferStartMessage {
@@ -248,6 +256,7 @@ enum {
     VD_AGENT_CAP_AUDIO_VOLUME_SYNC,
     VD_AGENT_CAP_MONITORS_CONFIG_POSITION,
     VD_AGENT_CAP_FILE_XFER_DISABLED,
+    VD_AGENT_CAP_FILE_XFER_DETAILED_ERRORS,
     VD_AGENT_END_CAP,
 };
 
