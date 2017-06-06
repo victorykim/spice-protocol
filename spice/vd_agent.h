@@ -100,6 +100,9 @@ enum {
     VD_AGENT_FILE_XFER_STATUS_ERROR,
     VD_AGENT_FILE_XFER_STATUS_SUCCESS,
     VD_AGENT_FILE_XFER_STATUS_NOT_ENOUGH_SPACE,
+    VD_AGENT_FILE_XFER_STATUS_SESSION_LOCKED,
+    VD_AGENT_FILE_XFER_STATUS_VDAGENT_NOT_CONNECTED,
+    VD_AGENT_FILE_XFER_STATUS_DISABLED,
 };
 
 typedef struct SPICE_ATTR_PACKED VDAgentFileXferStatusMessage {
@@ -108,8 +111,11 @@ typedef struct SPICE_ATTR_PACKED VDAgentFileXferStatusMessage {
    /* Used to send additional data for detailed error messages
     * to clients with VD_AGENT_CAP_FILE_XFER_DETAILED_ERRORS capability.
     * Type of data varies with the result:
-    * result : data type
+    * result : data type (NULL if no data)
     * VD_AGENT_FILE_XFER_STATUS_NOT_ENOUGH_SPACE : uint64_t
+    * VD_AGENT_FILE_XFER_STATUS_SESSION_LOCKED : NULL
+    * VD_AGENT_FILE_XFER_STATUS_VDAGENT_NOT_CONNECTED : NULL
+    * VD_AGENT_FILE_XFER_STATUS_DISABLED : NULL
     */
    uint8_t data[0];
 } VDAgentFileXferStatusMessage;
