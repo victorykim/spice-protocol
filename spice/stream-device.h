@@ -85,6 +85,8 @@ typedef enum StreamMsgType {
     STREAM_TYPE_START_STOP,
     /* server notify errors to guest */
     STREAM_TYPE_NOTIFY_ERROR,
+    /* guest cursor */
+    STREAM_TYPE_CURSOR_SET,
 } StreamMsgType;
 
 /* Generic extension capabilities.
@@ -163,5 +165,36 @@ typedef struct StreamMsgNotifyError {
      */
     uint8_t msg[0];
 } StreamMsgNotifyError;
+
+#define STREAM_MSG_CURSOR_SET_MAX_WIDTH  1024
+#define STREAM_MSG_CURSOR_SET_MAX_HEIGHT 1024
+
+/* Guest cursor.
+ * This message is sent by the guest to the host.
+ *
+ * States allowed: Streaming
+ */
+typedef struct StreamMsgCursorSet {
+    /* basic cursor information */
+    /* for security reasons width and height should
+     * be limited to STREAM_MSG_CURSOR_SET_MAX_WIDTH and
+     * STREAM_MSG_CURSOR_SET_MAX_HEIGHT */
+    uint16_t width;
+    uint16_t height;
+    uint16_t hot_spot_x;
+    uint16_t hot_spot_y;
+    /* Cursor type, as defined by SpiceCursorType.
+     * Only ALPHA, COLOR24 and COLOR32 are allowed by this protocol
+     */
+    uint8_t type;
+
+    uint8_t padding1[3];
+
+    /* cursor data.
+     * Format and size depends on cursor_header type and size
+     */
+    uint8_t data[0];
+} StreamMsgCursorSet;
+
 
 #endif /* SPICE_STREAM_DEVICE_H_ */
