@@ -87,6 +87,8 @@ typedef enum StreamMsgType {
     STREAM_TYPE_NOTIFY_ERROR,
     /* guest cursor */
     STREAM_TYPE_CURSOR_SET,
+    /* guest cursor position */
+    STREAM_TYPE_CURSOR_MOVE,
 } StreamMsgType;
 
 /* Generic extension capabilities.
@@ -196,5 +198,14 @@ typedef struct StreamMsgCursorSet {
     uint8_t data[0];
 } StreamMsgCursorSet;
 
+/* Guest cursor position
+ * This message is sent by the guest to the host.
+ *
+ * States allowed: Streaming
+ */
+typedef struct StreamMsgCursorMove {
+    int32_t x;
+    int32_t y;
+} StreamMsgCursorMove;
 
 #endif /* SPICE_STREAM_DEVICE_H_ */
