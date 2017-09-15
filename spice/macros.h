@@ -379,7 +379,7 @@
 #endif /* generic */
 
 
-/* detect endianess */
+/* detect endianness */
 #undef SPICE_ENDIAN
 #define SPICE_ENDIAN_LITTLE 4321
 #define SPICE_ENDIAN_BIG    1234
@@ -428,11 +428,11 @@
 #endif
 
 #if !defined(SPICE_ENDIAN)
-#error Unable to detect processor endianess
+#error Unable to detect processor endianness
 #endif
 
 #if SPICE_ENDIAN == SPICE_ENDIAN_PDP
-#error PDP endianess not supported by Spice
+#error PDP endianness not supported by Spice
 #endif
 
 
