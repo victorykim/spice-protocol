@@ -404,7 +404,8 @@
 #  if defined(__LITTLE_ENDIAN__) || defined(__ARMEL__) \
       || defined(__THUMBEL__) || defined(__AARCH64EL__) \
       || defined(_MIPSEL) || defined(__MIPSEL) || defined(__MIPSEL__) \
-      || defined(__amd64__) || defined(__x86_64__) || defined(__i386__)
+      || defined(__amd64__) || defined(__x86_64__) || defined(__i386__) \
+      || defined(__e2k__)
 #    define SPICE_ENDIAN SPICE_ENDIAN_LITTLE
 #  endif
 #  if defined(__BIG_ENDIAN__) || defined(__ARMEB__) \
