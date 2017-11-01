@@ -98,7 +98,7 @@ typedef enum StreamMsgType {
  * If it is not sent, it means that guest/host doesn't support any extension.
  * Guest should send this as a reply from same type of message
  * from the host.
- * This message should be limited to 1024 bytes. This allows
+ * This message should be limited to STREAM_MSG_CAPABILITIES_MAX. This allows
  * plenty of negotiations.
  *
  * States allowed: Initial(host), Idle(guest)
@@ -107,6 +107,8 @@ typedef enum StreamMsgType {
 typedef struct StreamMsgCapabilities {
     uint8_t capabilities[0];
 } StreamMsgCapabilities;
+
+#define STREAM_MSG_CAPABILITIES_MAX 1024
 
 /* Define the format of the stream, start a new stream.
  * This message is sent by the guest to the host to
