@@ -1,5 +1,5 @@
 /*
-   Copyright (C) 2017 Red Hat, Inc.
+   Copyright (C) 2017-2018 Red Hat, Inc.
 
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions are
@@ -91,6 +91,10 @@ typedef enum StreamMsgType {
     /* guest cursor position */
     STREAM_TYPE_CURSOR_MOVE,
 } StreamMsgType;
+
+typedef enum StreamCapabilities {
+    STREAM_CAP_END // this must be the last
+} StreamCapabilities;
 
 /* Generic extension capabilities.
  * This is a set of bits to specify which capabilities host and guest support.
