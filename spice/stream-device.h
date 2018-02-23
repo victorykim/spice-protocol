@@ -48,6 +48,8 @@
  * containing integers up to 64 bit.
  * All numbers are in little endian format.
  *
+ * For security reasons structures should not contain implicit paddings.
+ *
  * The protocol can be defined by these states:
  * - Initial. Device just opened. Guest should wait
  *   for a message from the host;
