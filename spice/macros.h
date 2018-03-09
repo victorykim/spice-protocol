@@ -252,6 +252,10 @@
 #  define SPICE_BYTESWAP16(val) __builtin_bswap16(val)
 #  define SPICE_BYTESWAP32(val) __builtin_bswap32(val)
 #  define SPICE_BYTESWAP64(val) __builtin_bswap64(val)
+#elif defined(_MSC_VER)
+#  define SPICE_BYTESWAP16(val) _byteswap_ushort(val)
+#  define SPICE_BYTESWAP32(val) _byteswap_ulong(val)
+#  define SPICE_BYTESWAP64(val) _byteswap_uint64(val)
 #else /* generic */
 #  define SPICE_BYTESWAP16(val) (SPICE_BYTESWAP16_CONSTANT (val))
 #  define SPICE_BYTESWAP32(val) (SPICE_BYTESWAP32_CONSTANT (val))
