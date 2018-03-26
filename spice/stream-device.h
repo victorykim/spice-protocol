@@ -35,7 +35,6 @@
  * The device is currently implemented as a VirtIO port inside the
  * guest. The guest should open that device to use this protocol to
  * communicate with the host.
- * The name of the port is "com.redhat.stream.0".
  */
 
 #ifndef SPICE_STREAM_DEVICE_H_
