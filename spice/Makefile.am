@@ -22,4 +22,6 @@ spice_protocol_include_HEADERS =		\
 	stream-device.h				\
 	$(NULL)
 
+EXTRA_DIST = meson.build
+
 -include $(top_srcdir)/git.mk
