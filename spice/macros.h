@@ -248,130 +248,14 @@
 
 /* Arch specific stuff for speed
  */
-#if defined (__GNUC__) && (__GNUC__ >= 2) && defined (__OPTIMIZE__)
-#  if defined (__i386__)
-#    define SPICE_BYTESWAP16_IA32(val) \
-       (__extension__						\
-	({ register uint16_t __v, __x = ((uint16_t) (val));	\
-	   if (__builtin_constant_p (__x))			\
-	     __v = SPICE_BYTESWAP16_CONSTANT (__x);		\
-	   else							\
-	     __asm__ ("rorw $8, %w0"				\
-		      : "=r" (__v)				\
-		      : "0" (__x)				\
-		      : "cc");					\
-	    __v; }))
-#    if !defined (__i486__) && !defined (__i586__) \
-	&& !defined (__pentium__) && !defined (__i686__) \
-	&& !defined (__pentiumpro__) && !defined (__pentium4__)
-#       define SPICE_BYTESWAP32_IA32(val) \
-	  (__extension__					\
-	   ({ register uint32_t __v, __x = ((uint32_t) (val));	\
-	      if (__builtin_constant_p (__x))			\
-		__v = SPICE_BYTESWAP32_CONSTANT (__x);	\
-	      else						\
-		__asm__ ("rorw $8, %w0\n\t"			\
-			 "rorl $16, %0\n\t"			\
-			 "rorw $8, %w0"				\
-			 : "=r" (__v)				\
-			 : "0" (__x)				\
-			 : "cc");				\
-	      __v; }))
-#    else /* 486 and higher has bswap */
-#       define SPICE_BYTESWAP32_IA32(val) \
-	  (__extension__					\
-	   ({ register uint32_t __v, __x = ((uint32_t) (val));	\
-	      if (__builtin_constant_p (__x))			\
-		__v = SPICE_BYTESWAP32_CONSTANT (__x);	\
-	      else						\
-		__asm__ ("bswap %0"				\
-			 : "=r" (__v)				\
-			 : "0" (__x));				\
-	      __v; }))
-#    endif /* processor specific 32-bit stuff */
-#    define SPICE_BYTESWAP64_IA32(val) \
-       (__extension__							\
-	({ union { uint64_t __ll;					\
-		   uint32_t __l[2]; } __w, __r;				\
-	   __w.__ll = ((uint64_t) (val));				\
-	   if (__builtin_constant_p (__w.__ll))				\
-	     __r.__ll = SPICE_BYTESWAP64_CONSTANT (__w.__ll);		\
-	   else								\
-	     {								\
-	       __r.__l[0] = SPICE_BYTESWAP32 (__w.__l[1]);		\
-	       __r.__l[1] = SPICE_BYTESWAP32 (__w.__l[0]);		\
-	     }								\
-	   __r.__ll; }))
-     /* Possibly just use the constant version and let gcc figure it out? */
-#    define SPICE_BYTESWAP16(val) (SPICE_BYTESWAP16_IA32 (val))
-#    define SPICE_BYTESWAP32(val) (SPICE_BYTESWAP32_IA32 (val))
-#    define SPICE_BYTESWAP64(val) (SPICE_BYTESWAP64_IA32 (val))
-#  elif defined (__ia64__)
-#    define SPICE_BYTESWAP16_IA64(val) \
-       (__extension__						\
-	({ register uint16_t __v, __x = ((uint16_t) (val));	\
-	   if (__builtin_constant_p (__x))			\
-	     __v = SPICE_BYTESWAP16_CONSTANT (__x);		\
-	   else							\
-	     __asm__ __volatile__ ("shl %0 = %1, 48 ;;"		\
-				   "mux1 %0 = %0, @rev ;;"	\
-				    : "=r" (__v)		\
-				    : "r" (__x));		\
-	    __v; }))
-#    define SPICE_BYTESWAP32_IA64(val) \
-       (__extension__						\
-	 ({ register uint32_t __v, __x = ((uint32_t) (val));	\
-	    if (__builtin_constant_p (__x))			\
-	      __v = SPICE_BYTESWAP32_CONSTANT (__x);		\
-	    else						\
-	     __asm__ __volatile__ ("shl %0 = %1, 32 ;;"		\
-				   "mux1 %0 = %0, @rev ;;"	\
-				    : "=r" (__v)		\
-				    : "r" (__x));		\
-	    __v; }))
-#    define SPICE_BYTESWAP64_IA64(val) \
-       (__extension__						\
-	({ register uint64_t __v, __x = ((uint64_t) (val));	\
-	   if (__builtin_constant_p (__x))			\
-	     __v = SPICE_BYTESWAP64_CONSTANT (__x);		\
-	   else							\
-	     __asm__ __volatile__ ("mux1 %0 = %1, @rev ;;"	\
-				   : "=r" (__v)			\
-				   : "r" (__x));		\
-	   __v; }))
-#    define SPICE_BYTESWAP16(val) (SPICE_BYTESWAP16_IA64 (val))
-#    define SPICE_BYTESWAP32(val) (SPICE_BYTESWAP32_IA64 (val))
-#    define SPICE_BYTESWAP64(val) (SPICE_BYTESWAP64_IA64 (val))
-#  elif defined (__x86_64__)
-#    define SPICE_BYTESWAP32_X86_64(val) \
-       (__extension__						\
-	 ({ register uint32_t __v, __x = ((uint32_t) (val));	\
-	    if (__builtin_constant_p (__x))			\
-	      __v = SPICE_BYTESWAP32_CONSTANT (__x);		\
-	    else						\
-	     __asm__ ("bswapl %0"				\
-		      : "=r" (__v)				\
-		      : "0" (__x));				\
-	    __v; }))
-#    define SPICE_BYTESWAP64_X86_64(val) \
-       (__extension__						\
-	({ register uint64_t __v, __x = ((uint64_t) (val));	\
-	   if (__builtin_constant_p (__x))			\
-	     __v = SPICE_BYTESWAP64_CONSTANT (__x);		\
-	   else							\
-	     __asm__ ("bswapq %0"				\
-		      : "=r" (__v)				\
-		      : "0" (__x));				\
-	   __v; }))
-     /* gcc seems to figure out optimal code for this on its own */
-#    define SPICE_BYTESWAP16(val) (SPICE_BYTESWAP16_CONSTANT (val))
-#    define SPICE_BYTESWAP32(val) (SPICE_BYTESWAP32_X86_64 (val))
-#    define SPICE_BYTESWAP64(val) (SPICE_BYTESWAP64_X86_64 (val))
-#  else /* generic gcc */
-#    define SPICE_BYTESWAP16(val) (SPICE_BYTESWAP16_CONSTANT (val))
-#    define SPICE_BYTESWAP32(val) (SPICE_BYTESWAP32_CONSTANT (val))
-#    define SPICE_BYTESWAP64(val) (SPICE_BYTESWAP64_CONSTANT (val))
-#  endif
+#if defined (__GNUC__) && (__GNUC__ >= 4) && defined (__OPTIMIZE__)
+#  define SPICE_BYTESWAP16(val) __builtin_bswap16(val)
+#  define SPICE_BYTESWAP32(val) __builtin_bswap32(val)
+#  define SPICE_BYTESWAP64(val) __builtin_bswap64(val)
+#elif defined(_MSC_VER)
+#  define SPICE_BYTESWAP16(val) _byteswap_ushort(val)
+#  define SPICE_BYTESWAP32(val) _byteswap_ulong(val)
+#  define SPICE_BYTESWAP64(val) _byteswap_uint64(val)
 #else /* generic */
 #  define SPICE_BYTESWAP16(val) (SPICE_BYTESWAP16_CONSTANT (val))
 #  define SPICE_BYTESWAP32(val) (SPICE_BYTESWAP32_CONSTANT (val))
@@ -379,7 +263,7 @@
 #endif /* generic */
 
 
-/* detect endianess */
+/* detect endianness */
 #undef SPICE_ENDIAN
 #define SPICE_ENDIAN_LITTLE 4321
 #define SPICE_ENDIAN_BIG    1234
@@ -404,7 +288,8 @@
 #  if defined(__LITTLE_ENDIAN__) || defined(__ARMEL__) \
       || defined(__THUMBEL__) || defined(__AARCH64EL__) \
       || defined(_MIPSEL) || defined(__MIPSEL) || defined(__MIPSEL__) \
-      || defined(__amd64__) || defined(__x86_64__) || defined(__i386__)
+      || defined(__amd64__) || defined(__x86_64__) || defined(__i386__) \
+      || defined(__e2k__)
 #    define SPICE_ENDIAN SPICE_ENDIAN_LITTLE
 #  endif
 #  if defined(__BIG_ENDIAN__) || defined(__ARMEB__) \
@@ -427,11 +312,11 @@
 #endif
 
 #if !defined(SPICE_ENDIAN)
-#error Unable to detect processor endianess
+#error Unable to detect processor endianness
 #endif
 
 #if SPICE_ENDIAN == SPICE_ENDIAN_PDP
-#error PDP endianess not supported by Spice
+#error PDP endianness not supported by Spice
 #endif
 
 

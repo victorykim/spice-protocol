@@ -19,6 +19,9 @@ spice_protocol_include_HEADERS =		\
 	types.h					\
 	vd_agent.h				\
 	vdi_dev.h				\
+	stream-device.h				\
 	$(NULL)
+
+EXTRA_DIST = meson.build
 
 -include $(top_srcdir)/git.mk

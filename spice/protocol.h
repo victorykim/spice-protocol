@@ -45,6 +45,12 @@
 #define SPICE_TICKET_KEY_PAIR_LENGTH 1024
 #define SPICE_TICKET_PUBKEY_BYTES (SPICE_TICKET_KEY_PAIR_LENGTH / 8 + 34)
 
+/*
+ * This is the maximum number of streams possible.
+ * IDs will be in the interval [0, SPICE_MAX_NUM_STREAMS).
+ */
+#define SPICE_MAX_NUM_STREAMS 64
+
 typedef struct SPICE_ATTR_PACKED SpiceLinkHeader {
     uint32_t magic;
     uint32_t major_version;

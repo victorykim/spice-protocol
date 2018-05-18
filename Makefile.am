@@ -22,4 +22,6 @@ MAINTAINERCLEANFILES =						\
 	`find "$(srcdir)" -type f -name Makefile.in -print`	\
 	$(NULL)
 
+EXTRA_DIST = meson.build
+
 -include $(top_srcdir)/git.mk
