@@ -121,6 +121,14 @@ typedef enum SpicePubkeyType {
     SPICE_PUBKEY_TYPE_ENUM_END
 } SpicePubkeyType;
 
+typedef enum SpicePowerEvent {
+    SPICE_POWER_EVENT_RESET,
+    SPICE_POWER_EVENT_SHUTDOWN,
+    SPICE_POWER_EVENT_POWERDOWN,
+
+    SPICE_POWER_EVENT_ENUM_END
+} SpicePowerEvent;
+
 typedef enum SpiceClipType {
     SPICE_CLIP_TYPE_NONE,
     SPICE_CLIP_TYPE_RECTS,
@@ -475,6 +483,7 @@ enum {
     SPICE_MSGC_MAIN_MIGRATE_END,
     SPICE_MSGC_MAIN_MIGRATE_DST_DO_SEAMLESS,
     SPICE_MSGC_MAIN_MIGRATE_CONNECTED_SEAMLESS,
+    SPICE_MSGC_MAIN_POWER_EVENT_REQUEST,
 
     SPICE_MSGC_END_MAIN
 };
@@ -524,6 +533,16 @@ enum {
     SPICE_MSGC_DISPLAY_GL_DRAW_DONE,
 
     SPICE_MSGC_END_DISPLAY
+};
+
+//add moving picture enums 
+enum {
+    SPICE_MSGC_DISPLAY_INIT2 = 901,
+    SPICE_MSGC_DISPLAY_StreamConfig,
+    SPICE_MSGC_DISPLAY_StreamFrameData,
+    SPICE_MSGC_DISPLAY_StreamStatData,
+ 
+    SPICE_MSGC_END_DISPLAY2
 };
 
 enum {
